@@ -415,3 +415,98 @@ Jika data terlalu sedikit, pembagian train/validation/test bisa mengurangi data 
 - **Validation set** digunakan untuk mengevaluasi performa selama pelatihan dan tuning hyperparameter.
 - **Test set** digunakan satu kali untuk mengevaluasi performa akhir model.
 - Pembagian data yang tepat membantu mencegah overfitting dan meningkatkan generalisasi model.
+
+# 2. Preprocessing Data
+
+Pra-pemrosesan data (data preprocessing) adalah tahap penting sebelum data digunakan dalam pelatihan model Machine Learning. Tujuan utama preprocessing adalah memastikan bahwa data berada dalam format yang bersih, konsisten, dan dapat diproses oleh algoritma dengan efektif.
+
+Beberapa langkah umum dalam preprocessing antara lain:
+- Normalisasi
+- Encoding data kategorikal
+- Penanganan missing value
+- Feature engineering dan feature selection
+
+## 2.1 Normalisasi: MinMaxScaler vs StandardScaler
+
+### Mengapa Normalisasi Penting?
+
+Banyak algoritma Machine Learning, seperti K-Nearest Neighbors (KNN), Support Vector Machine (SVM), dan Neural Network, sangat sensitif terhadap skala fitur. Tanpa normalisasi, fitur dengan skala besar dapat mendominasi perhitungan dan menyebabkan model bias.
+
+### Analogi
+
+Bayangkan kamu adalah pelatih sepak bola yang menilai pemain berdasarkan:
+- Kecepatan lari (dalam detik)
+- Tinggi badan (dalam cm)
+- Gaji bulanan (dalam juta rupiah)
+
+Tanpa normalisasi, model mungkin menganggap gaji lebih penting hanya karena angkanya jauh lebih besar, padahal kecepatan jauh lebih relevan. Normalisasi menyetarakan skala semua fitur agar model memperlakukan semuanya secara adil.
+
+### MinMaxScaler
+
+**Tujuan:** Mengubah skala nilai fitur agar berada dalam rentang [0, 1].
+
+**Rumus:**
+
+$$
+x_{\text{scaled}} = \frac{x - x_{\text{min}}}{x_{\text{max}} - x_{\text{min}}}
+$$
+
+**Karakteristik:**
+- Rentang output selalu antara 0 dan 1
+- Sangat sensitif terhadap outlier
+- Cocok jika data memiliki rentang nilai tetap dan stabil
+
+**Contoh:**
+Jika data suhu berkisar antara 20°C hingga 40°C dan nilai saat ini adalah 30°C:
+
+$$
+x_{\text{scaled}} = \frac{30 - 20}{40 - 20} = 0.5
+$$
+
+**Analogi:**  
+Seperti mengubah semua tinggi pemain ke dalam skala 0–1, di mana 0 adalah pemain terpendek dan 1 adalah tertinggi. Ini memungkinkan perbandingan yang adil antar pemain.
+
+### StandardScaler (Z-Score Normalization)
+
+**Tujuan:** Mengubah fitur agar memiliki nilai rata-rata 0 dan standar deviasi 1.
+
+**Rumus:**
+
+$$
+x_{\text{scaled}} = \frac{x - \mu}{\sigma}
+$$
+
+dengan:
+- $\( \mu \)$ adalah rata-rata (mean)
+- $\( \sigma \)$ adalah standar deviasi dari fitur
+
+**Karakteristik:**
+- Output tidak dibatasi ke rentang tertentu
+- Lebih tahan terhadap outlier dibanding MinMax
+- Cocok jika data mengikuti distribusi normal (gaussian)
+
+**Contoh:**
+Jika rata-rata berat badan adalah 60 kg dan standar deviasinya 10 kg, maka berat 70 kg akan menjadi:
+
+$$
+x_{\text{scaled}} = \frac{70 - 60}{10} = 1.0
+$$
+
+**Analogi:**  
+Seperti mengukur seberapa jauh nilai seseorang dari rata-rata. Nilai 0 berarti standar, positif berarti di atas rata-rata, dan negatif berarti di bawah.
+
+### Perbandingan MinMax vs StandardScaler
+
+| Aspek                  | MinMaxScaler               | StandardScaler                |
+|------------------------|----------------------------|-------------------------------|
+| Rentang hasil          | 0 hingga 1                 | Tidak terbatas                |
+| Sensitif terhadap outlier | Ya                     | Tidak terlalu                 |
+| Cocok untuk            | Data stabil, range tetap   | Data normal atau bervariasi   |
+| Distribusi data        | Tidak diperhitungkan       | Menyesuaikan distribusi       |
+
+### Kesimpulan
+
+- Normalisasi membantu model memperlakukan semua fitur secara setara.
+- Gunakan MinMaxScaler jika data tidak memiliki outlier dan berada dalam rentang yang tetap.
+- Gunakan StandardScaler jika data memiliki distribusi normal atau outlier yang signifikan.
+- Pilih metode normalisasi sesuai dengan jenis data dan algoritma yang digunakan.
