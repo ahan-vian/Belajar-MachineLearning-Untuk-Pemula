@@ -390,17 +390,23 @@ Misalkan model kita dievaluasi dengan Mean Squared Error (MSE), maka kita hitung
 
 - Training Error:
   $
+  {
   \text{MSE}_{\text{train}} = \frac{1}{n_{\text{train}}} \sum_{i=1}^{n_{\text{train}}} (y_i - \hat{y}_i)^2
+  }
   $
 
 - Validation Error:
   $
+  {
   \text{MSE}_{\text{val}} = \frac{1}{n_{\text{val}}} \sum_{i=1}^{n_{\text{val}}} (y_i - \hat{y}_i)^2
+  }
   $
 
 - Test Error:
   $
+  {
   \text{MSE}_{\text{test}} = \frac{1}{n_{\text{test}}} \sum_{i=1}^{n_{\text{test}}} (y_i - \hat{y}_i)^2
+  }
   $
 
 
@@ -477,7 +483,7 @@ x_{\text{scaled}} = \frac{x - \mu}{\sigma}
 $$
 
 dengan:
-- $\( \mu \)$ adalah rata-rata (mean)
+- ${\( \mu \)}$ adalah rata-rata (mean)
 - $\( \sigma \)$ adalah standar deviasi dari fitur
 
 **Karakteristik:**
@@ -510,3 +516,83 @@ Seperti mengukur seberapa jauh nilai seseorang dari rata-rata. Nilai 0 berarti s
 - Gunakan MinMaxScaler jika data tidak memiliki outlier dan berada dalam rentang yang tetap.
 - Gunakan StandardScaler jika data memiliki distribusi normal atau outlier yang signifikan.
 - Pilih metode normalisasi sesuai dengan jenis data dan algoritma yang digunakan.
+
+
+## 2.2 Encoding: Label, One-Hot, Ordinal
+
+Sebagian besar algoritma Machine Learning hanya dapat memproses data numerik. Oleh karena itu, data kategorikal (seperti warna, jenis, kelas, status) harus diubah menjadi angka melalui proses yang disebut **encoding**.
+
+Encoding sangat penting untuk mencegah kesalahan interpretasi model terhadap nilai kategori.
+
+### Analogi
+
+Bayangkan kamu sedang mengisi formulir pendaftaran yang menanyakan pekerjaan:
+- Pelajar
+- Karyawan
+- Wirausaha
+
+Jika sistem tidak bisa membaca huruf, maka setiap pilihan harus dikonversi menjadi angka atau kode agar bisa diproses. Proses pengubahan ini disebut encoding.
+
+### 1. Label Encoding
+
+Label Encoding mengubah setiap kategori menjadi nilai bilangan bulat unik.
+
+**Contoh:**
+
+| Warna   | Encoded |
+|---------|---------|
+| Merah   | 0       |
+| Hijau   | 1       |
+| Biru    | 2       |
+
+**Karakteristik:**
+- Sederhana dan efisien
+- Cocok untuk data ordinal
+- Tidak cocok untuk data nominal karena memberi kesan adanya urutan
+
+**Risiko:**  
+Model dapat menganggap bahwa "Biru > Hijau > Merah", padahal tidak ada hubungan numerik antara kategori tersebut.
+
+### 2. One-Hot Encoding
+
+One-Hot Encoding mengubah setiap kategori menjadi vektor biner, di mana hanya satu elemen bernilai 1 dan sisanya 0.  
+| Warna | Merah | Hijau | Biru |
+| ----- | ----- | ----- | ---- |
+| Merah | 1     | 0     | 0    |
+| Hijau | 0     | 1     | 0    |
+| Biru  | 0     | 0     | 1    |
+
+**Karakteristik**
+- Tidak memperkenalkan urutan palsu
+- Cocok untuk data nominal
+
+**Resiko**  
+Bisa membuat data terlalu besar yang dapat menyebabkan overfitting
+
+### 3. Ordinal Encoding
+Ordinal Encoding digunakan untuk data kategorikal yang memang memiliki tingkatan atau urutan logis. Mirip label encoding, tapi urutan sengaja didefinisikan karena memang ada tingkatan logis.
+
+contoh : 
+
+| Ukuran Baju | Encoded |
+| ----------- | ------- |
+| Kecil       | 1       |
+| Sedang      | 2       |
+| Besar       | 3       |
+
+**Karakteristik**
+- Menghormati urutan logis
+- Cocok untuk fitur seperti level pendidikan, rating, atau ukuran
+
+**Perbandingan Metode Encoding**
+| Metode           | Cocok Untuk  | Keunggulan                     | Kekurangan                    |
+| ---------------- | ------------ | ------------------------------ | ----------------------------- |
+| Label Encoding   | Data ordinal | Ringkas dan cepat              | Menimbulkan urutan semu       |
+| One-Hot Encoding | Data nominal | Akurat, tidak ada urutan palsu | Dimensi tinggi (kolom banyak) |
+| Ordinal Encoding | Data ordinal | Menangkap tingkatan logis      | Tidak cocok untuk data acak   |
+
+**Kesimpulan**
+- Gunakan **Label Encoding** hanya jika data memiliki sedikit kategori dan tidak akan menyebabkan makna urutan yang keliru.
+- Gunakan **One-Hot Encoding** untuk kategori bebas tanpa urutan seperti warna, kota, atau jenis barang.
+- Gunakan **Ordinal Encoding** jika kategori memiliki urutan seperti kecil → sedang → besar atau level pendidikan.
+
